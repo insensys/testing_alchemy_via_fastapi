@@ -29,6 +29,11 @@ class Subscription(Base):
     )
 
 class OrganizationSubscription(Base):
+    """
+    fields to add:
+        organization_tin:str
+        subscription_name:str
+    """
     __tablename__ = "organization_subscription"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

@@ -8,16 +8,8 @@ from services import add_organization, get_org_by_name, create_subsc
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from db_config import get_async_session, create_tables
 from routers.subscription_router import subscription_router
+from routers.org_subsc_router import org_subsc_router
 from sqlalchemy.ext.asyncio import AsyncSession
-
-
-
-# DB_URL_SYNC = "sqlite:///./experimental.db"
-# engine = create_engine(DB_URL_SYNC, echo=True)
-# Base.metadata.create_all(engine)
-
-
-
 
 
 @asynccontextmanager
@@ -29,6 +21,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(subscription_router)
+app.include_router(org_subsc_router)
 
 @app.get("/")
 async def hello_func():

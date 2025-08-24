@@ -4,6 +4,10 @@ from sqlalchemy import select
 from models import Subscription
 from schemas import SubscriptionCreateOut
 from typing import List
+from models import OrganizationSubscription
+
+from schemas_folder.org_subsc_schema import OrgSubscIn, OrgSubscOut
+
 
 async def get_all_subscriptions( db_connection: AsyncSession) -> List[SubscriptionCreateOut]:
     """
@@ -14,12 +18,6 @@ async def get_all_subscriptions( db_connection: AsyncSession) -> List[Subscripti
         sql_statement = select(Subscription)
         query_result = await db_connection.execute(sql_statement)
         list_subscriptions = query_result.scalars().all()
-        count:int = 1
-        for sub in list_subscriptions:
-            print (count)
-            print (sub.name)
-            print (sub.description)
-            count+=1
 
         susbcription_list=[
             SubscriptionCreateOut.model_validate(subscription)
@@ -33,3 +31,24 @@ async def get_all_subscriptions( db_connection: AsyncSession) -> List[Subscripti
             status_code=400,
             detail=f"Error getting list of subsciption: {str(e)}"
         )
+
+async def add_new_org_subsc(new_org_subsc_data: OrgSubscIn, db_session: AsyncSession) -> OrgSubscOut:
+    """
+    Adding new org subscription in database
+    """
+    parsed_data = OrganizationSubscription(
+        organization_tin = new_org_subsc_data.organization_tin,
+        subscription_name = new_org_subsc_data.subscription_name
+    )
+
+    new_subc_rec=db_session.add(parsed_data)
+    await db_session.commit()
+    db_session.refresh(parsed_data)
+
+    return OrgSubscOut(
+        id = parsed_data.id,
+        organization_tin = parsed_data.organization_tin,
+        subscription_name = parsed_data.subscription_name,
+        is_active = parsed_data.is_active
+    )
+    
