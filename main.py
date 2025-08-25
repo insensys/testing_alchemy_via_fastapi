@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_tables()
-    # Base.metadata.create_all(engine)
+    
     yield
 
 app = FastAPI(lifespan=lifespan)

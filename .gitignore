@@ -3,3 +3,4 @@
 *venv/
 experimental.db
 .env*
+experimental.sqlite3

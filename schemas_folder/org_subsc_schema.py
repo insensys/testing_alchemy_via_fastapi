@@ -9,10 +9,10 @@ class OrgSubscIn(BaseModel):
 class OrgSubscOut(OrgSubscIn):
     """
     fields:
-        id: str
+        id: int
         organization_tin: str
         subscription_name: str
         is_active: bool
     """
-    id: str
+    id: int
     is_active: bool

@@ -36,19 +36,27 @@ async def add_new_org_subsc(new_org_subsc_data: OrgSubscIn, db_session: AsyncSes
     """
     Adding new org subscription in database
     """
-    parsed_data = OrganizationSubscription(
-        organization_tin = new_org_subsc_data.organization_tin,
-        subscription_name = new_org_subsc_data.subscription_name
-    )
 
-    new_subc_rec=db_session.add(parsed_data)
-    await db_session.commit()
-    db_session.refresh(parsed_data)
+    try:
+        parsed_data = OrganizationSubscription(
+            organization_tin = new_org_subsc_data.organization_tin,
+            subscription_name = new_org_subsc_data.subscription_name
+        )
 
-    return OrgSubscOut(
+        db_session.add(parsed_data)
+
+        await db_session.commit()
+        await db_session.refresh(parsed_data)
+
+        return OrgSubscOut(
         id = parsed_data.id,
         organization_tin = parsed_data.organization_tin,
         subscription_name = parsed_data.subscription_name,
         is_active = parsed_data.is_active
     )
+    except Exception as e:
+        await db_session.rollback()
+        HTTPException(status_code=400, detail=f"Error after try to write in org_subsc table. More details:{e}")
+
+    
     
