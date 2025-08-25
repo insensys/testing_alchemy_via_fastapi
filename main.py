@@ -36,14 +36,6 @@ async def add_org(user_input_organization: OrganizationCreateIn, db: AsyncSessio
     return created_org
 
 
-@app.get("/org_by_name", response_model=OrganizationCreateOut)
-async def org_by_name(org_name: str, db: AsyncSession = Depends(get_async_session)):
-    """
-    Search in db
-    """
-    return await get_org_by_name(org_name, db)
-
-
 @app.post("/add_subscription", response_model=SubscriptionCreateOut)
 async def add_subscription(subscription: SubscriptionCreateIn, open_db_session: AsyncSession = Depends(get_async_session)):
    return await create_subsc(subscription, open_db_session)
