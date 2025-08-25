@@ -3,13 +3,18 @@ from schemas_folder.org_subsc_schema import OrgSubscOut, OrgSubscIn
 from  fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from db_config import get_async_session
-from service_folder.subdscription_service import add_new_org_subsc
+from service_folder.subdscription_service import add_new_org_subsc, get_organization_subscriptions_list
+from typing import List
 
 
 org_subsc_router = APIRouter(
     prefix="/org_subsc",
     tags=["Organization subscription"]
 )
+
+@org_subsc_router.get("/get_org_subsc_list", response_model=List[OrgSubscOut])
+async def get_org_subsc_list(db_session: AsyncSession = Depends(get_async_session)):
+    return await get_organization_subscriptions_list(db_session)
 
 @org_subsc_router.post("/add_new_record", response_model= OrgSubscOut)
 async def add_new_org(new_org_data: OrgSubscIn, db_session: AsyncSession = Depends(get_async_session)):

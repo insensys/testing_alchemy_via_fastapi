@@ -5,6 +5,7 @@ from models import Subscription
 from schemas import SubscriptionCreateOut
 from typing import List
 from models import OrganizationSubscription
+from schemas_folder.org_subsc_schema import OrgSubscOut
 
 from schemas_folder.org_subsc_schema import OrgSubscIn, OrgSubscOut
 
@@ -32,6 +33,7 @@ async def get_all_subscriptions( db_connection: AsyncSession) -> List[Subscripti
             detail=f"Error getting list of subsciption: {str(e)}"
         )
 
+
 async def add_new_org_subsc(new_org_subsc_data: OrgSubscIn, db_session: AsyncSession) -> OrgSubscOut:
     """
     Adding new org subscription in database
@@ -56,7 +58,24 @@ async def add_new_org_subsc(new_org_subsc_data: OrgSubscIn, db_session: AsyncSes
     )
     except Exception as e:
         await db_session.rollback()
-        HTTPException(status_code=400, detail=f"Error after try to write in org_subsc table. More details:{e}")
+        raise HTTPException(status_code=400, detail=f"Error after try to write in org_subsc table. More details:{e}")
 
-    
-    
+
+async def get_organization_subscriptions_list(db_session: AsyncSession) -> List[OrgSubscOut]:
+    """
+    Get list of organizations subscriptions
+    """
+
+    try:
+        sql_statement = select(OrganizationSubscription)
+        query_result = await db_session.execute(sql_statement)
+        list_org_subsc = query_result.scalars().all()
+
+        list_org_subsc = [
+            OrgSubscOut.model_validate(list_org_subsc)
+            for org_subsc in list_org_subsc
+        ]
+        return list_org_subsc
+    except Exception as e:
+        await db_session.rollback()
+        raise HTTPException(status_code=400, detail=f"Error geting org subscriptions: {str(e)}")

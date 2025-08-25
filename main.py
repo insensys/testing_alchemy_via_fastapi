@@ -47,10 +47,3 @@ async def org_by_name(org_name: str, db: AsyncSession = Depends(get_async_sessio
 @app.post("/add_subscription", response_model=SubscriptionCreateOut)
 async def add_subscription(subscription: SubscriptionCreateIn, open_db_session: AsyncSession = Depends(get_async_session)):
    return await create_subsc(subscription, open_db_session)
-
-
-
-
-
-    
-
