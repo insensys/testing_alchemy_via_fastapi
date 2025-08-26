@@ -10,6 +10,7 @@ from db_config import get_async_session, create_tables
 from routers.subscription_router import subscription_router
 from routers.org_subsc_router import org_subsc_router
 from sqlalchemy.ext.asyncio import AsyncSession
+from admin.ad_main import admin
 
 
 @asynccontextmanager
@@ -19,7 +20,7 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
-
+admin.mount_to(app)
 app.include_router(subscription_router)
 app.include_router(org_subsc_router)
 
