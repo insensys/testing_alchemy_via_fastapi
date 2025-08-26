@@ -34,6 +34,11 @@ class Subscription(Base):
         passive_deletes=True
     )
 
+
+class SubscriptionView(ModelView):
+    form_include_pk = True
+
+
 class OrganizationSubscription(Base):
     """
     fields to add:
@@ -49,3 +54,7 @@ class OrganizationSubscription(Base):
 
     organization: Mapped["Organization"] = relationship(back_populates="org_subscription")
     subscription: Mapped["Subscription"] = relationship(back_populates="organizations_on_this_subs") 
+
+
+class OrganizationSubscriptionView(ModelView):
+    form_include_pk = True
