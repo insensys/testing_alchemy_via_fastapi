@@ -1,6 +1,5 @@
 from sqlalchemy import String, Text, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from starlette_admin.contrib.sqla import ModelView
 
 class Base(DeclarativeBase):
     pass
@@ -16,10 +15,6 @@ class Organization(Base):
         cascade="all, delete-orphan",
         passive_deletes=True
     )
-
-
-class OrganizationView(ModelView):
-    form_include_pk = True
     
 
 class Subscription(Base):
@@ -33,10 +28,6 @@ class Subscription(Base):
         cascade="all, delete-orphan",
         passive_deletes=True
     )
-
-
-class SubscriptionView(ModelView):
-    form_include_pk = True
 
 
 class OrganizationSubscription(Base):
@@ -56,5 +47,3 @@ class OrganizationSubscription(Base):
     subscription: Mapped["Subscription"] = relationship(back_populates="organizations_on_this_subs") 
 
 
-class OrganizationSubscriptionView(ModelView):
-    form_include_pk = True
