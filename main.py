@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from fastapi import FastAPI, Depends
-from models import Base, Subscription
+from models_folder.models import Base, Subscription
 from schemas import OrganizationCreateIn, OrganizationCreateOut, SubscriptionCreateOut, SubscriptionCreateIn
 from services import add_organization, get_org_by_name, create_subsc
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession

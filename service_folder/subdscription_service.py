@@ -1,11 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import  HTTPException
 from sqlalchemy import select
-from models import Subscription
+from models_folder.models import Subscription, OrganizationSubscription
 from schemas import SubscriptionCreateOut
 from typing import List
-from models import OrganizationSubscription
-from schemas_folder.org_subsc_schema import OrgSubscOut
 
 from schemas_folder.org_subsc_schema import OrgSubscIn, OrgSubscOut
 

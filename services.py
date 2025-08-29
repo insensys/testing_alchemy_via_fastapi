@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
-from models import Organization, Subscription
+from models_folder.models import Organization, Subscription
 from schemas import (OrganizationCreateIn, OrganizationCreateOut,
                      SubscriptionCreateIn,
                      SubscriptionCreateOut)
