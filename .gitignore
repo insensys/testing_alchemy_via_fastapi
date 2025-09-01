@@ -4,3 +4,4 @@
 experimental.db
 .env*
 experimental.sqlite3
+admin/docs/
