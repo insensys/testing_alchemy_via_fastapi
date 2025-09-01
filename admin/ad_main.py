@@ -10,13 +10,20 @@ from .ad_views.org_subc_view import OrganizationSubscriptionView
 from models_folder.models import Organization, Subscription, OrganizationSubscription
 from models_folder.app_user import AppUser
 from .ad_views.app_user_view import AppUserView
+from .ad_auth import SimpleAuthProvider
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware import Middleware
 
 
 DB_URL=db_settings.get_postgres_url
 engine = create_engine(DB_URL)
 
 
-admin = Admin(engine)
+admin = Admin(
+    engine,
+    auth_provider = SimpleAuthProvider(),
+    middlewares= [Middleware(SessionMiddleware, secret_key="This temp secret key")],
+    )
 
 
 admin.add_view(OrganizationView(Organization))
