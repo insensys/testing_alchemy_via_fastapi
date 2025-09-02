@@ -5,8 +5,11 @@ from starlette.requests import Request
 from sqlalchemy import select, or_
 from models_folder.app_user import AppUser
 from config.sync_db_config import SessionLocal
-import hmac
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError, VerificationError
 
+
+hasher = PasswordHasher()
 
 class SimpleAuthProvider(AuthProvider):
     async def is_authenticated(self, request: Request):
@@ -38,11 +41,10 @@ class SimpleAuthProvider(AuthProvider):
         if user is None:
             raise LoginFailed("Пользователь не найден")
 
-        if not hmac.compare_digest(
-            (password or "").encode("utf-8"),
-            (user.password or "").encode("utf-8"),
-        ):
-            raise LoginFailed("Неверный логин или пароль")
+        try:
+            hasher.verify((user.password or ""), (password or ""))
+        except VerifyMismatchError:
+            raise LoginFailed("Неверный пароль")        
 
         request.session["username"] = user.user_name or user.email
         return response
